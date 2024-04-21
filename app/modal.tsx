@@ -192,7 +192,7 @@ export default function Modal() {
 					<Input
 						className="w-full"
 						onChangeText={setDescription}
-						placeholder="A short description"
+						placeholder="e.g. Groceries"
 					/>
 
 					{error && <Text className="text-red-600">{error}</Text>}

@@ -52,14 +52,9 @@ const MessageContent = ({
 
 	const m = message as ChatCompletionMessageParam;
 
-	// if (m.role === "function") {
-	// 	return (
-	// 		<View style={{ opacity: 0.4 }}>
-	// 			<Text>Only seen by the model:</Text>
-	// 			<Text>{m.content?.toString().slice(0, 100)}...</Text>
-	// 		</View>
-	// 	);
-	// }
+	if (m.role === "function") {
+		return null;
+	}
 
 	return <ChatBubble message={m} />;
 };

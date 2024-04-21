@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import React from "react";
 import PieChart from "react-native-pie-chart";
+// import { PieChart } from "react-native-chart-kit";
 import Colors from "../utils/Colors";
 import { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
@@ -8,6 +9,11 @@ import colors from "tailwindcss/colors";
 import { Tables } from "@/config/database.type";
 import { H2, H3 } from "@/components/ui/typography";
 import { useColorScheme } from "@/lib/useColorScheme";
+
+/* 
+Animated Donut Chart: https://www.youtube.com/watch?v=Zgz1baxJslg
+
+*/
 
 const categoryColors = [
 	{
@@ -66,7 +72,7 @@ export default function CircularChart({
 					categoryColors?.find((val) => val.name === trans.category).color,
 				);
 
-				let valueToAdd = expensesMap.get(trans.category);
+				const valueToAdd = expensesMap.get(trans.category);
 				// console.log(valueToAdd);
 				if (!valueToAdd) {
 					expensesMap.set(trans.category, trans.amount);
@@ -117,6 +123,7 @@ export default function CircularChart({
 			</Text>
 			<H2>Spending Overview</H2>
 			<View className="flex flex-row gap-7 mt-6 items-center">
+				{/* Old Pie Chart */}
 				<PieChart
 					widthAndHeight={widthAndHeight}
 					series={values}
@@ -124,6 +131,7 @@ export default function CircularChart({
 					coverRadius={0.7}
 					coverFill={isDarkColorScheme ? "#27272a" : "#fff"}
 				/>
+
 				{categoryMap.length === 0 ? (
 					<View className="flex flex-row gap-5 items-center">
 						<FontAwesome name="circle" size={24} color={colors.gray[500]} />
@@ -131,9 +139,18 @@ export default function CircularChart({
 					</View>
 				) : (
 					<View>
-						{categoryMap.map((item) => (
-							<View className="flex flex-row gap-5 items-center">
-								<FontAwesome name="circle" size={24} color={item.value} />
+						{categoryMap.map((item, index) => (
+							<View
+								className="flex flex-row gap-2 items-center"
+								key={item.name}
+							>
+								<View className="relative items-center justify-center">
+									<FontAwesome name="circle" size={35} color={item.value} />
+									<Text className="text-xs text-white absolute">
+										{Number(values[index] / expenseTotal).toFixed(2) * 100}%
+									</Text>
+								</View>
+
 								<Text className="dark:text-white">{item.name}</Text>
 							</View>
 						))}
