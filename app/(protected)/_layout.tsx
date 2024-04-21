@@ -12,6 +12,7 @@ export default function ProtectedLayout() {
 		<Tabs
 			screenOptions={{
 				headerShown: false,
+				tabBarActiveTintColor: "#4ade80",
 				tabBarStyle: {
 					backgroundColor:
 						colorScheme === "dark"

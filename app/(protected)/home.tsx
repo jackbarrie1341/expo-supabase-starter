@@ -21,7 +21,10 @@ export default function TabOneScreen() {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const { data, error } = await supabase.from("transactions").select("*");
+			const { data, error } = await supabase
+				.from("transactions")
+				.select("*")
+				.order("created_at", { ascending: false });
 			console.log("data", data);
 			console.log("error", error);
 			return data;

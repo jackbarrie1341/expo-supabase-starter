@@ -40,7 +40,7 @@ export default function TransactionCard({
 					</H1>
 				</View>
 				<View className="flex flex-row mt-1 ">
-					<View className="rounded-full bg-purple-400">
+					<View className={cn("rounded-full ", transaction.color)}>
 						<Text className=" px-3 max-w-fit">{transaction.category}</Text>
 					</View>
 				</View>

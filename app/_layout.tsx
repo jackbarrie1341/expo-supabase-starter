@@ -3,6 +3,8 @@ import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { SupabaseProvider } from "@/context/supabase-provider";
+import { useColorScheme } from "@/lib/useColorScheme";
+import { theme } from "@/lib/constants";
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -10,6 +12,7 @@ export {
 } from "expo-router";
 
 export default function RootLayout() {
+	const { colorScheme } = useColorScheme();
 	return (
 		<SupabaseProvider>
 			<SafeAreaProvider>
@@ -26,6 +29,19 @@ export default function RootLayout() {
 							headerShown: true,
 							presentation: "modal",
 							title: "New Transaction",
+
+							headerTitleStyle: {
+								color:
+									colorScheme === "dark"
+										? theme.light.background
+										: theme.dark.background,
+							},
+							headerStyle: {
+								backgroundColor:
+									colorScheme === "dark"
+										? theme.dark.background
+										: theme.light.background,
+							},
 						}}
 					/>
 				</Stack>
