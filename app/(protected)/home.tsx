@@ -9,6 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "@/lib/useColorScheme";
+import CircularChart from "@/components/Home/CircularChart";
+import colors from "tailwindcss/colors";
 
 export default function TabOneScreen() {
 	const [transactions, setTransactions] = useState<
@@ -49,6 +51,10 @@ export default function TabOneScreen() {
 						/>
 					}
 				>
+					<CircularChart transactions={transactions} />
+					<View className="mb-4 mt-2">
+						<H1>Transactions</H1>
+					</View>
 					{transactions &&
 						transactions.map((trans) => (
 							<TransactionCard transaction={trans} key={trans.id} />
@@ -56,7 +62,7 @@ export default function TabOneScreen() {
 				</ScrollView>
 			</View>
 			<Link href="/modal" className="absolute bottom-4 right-4">
-				<Ionicons name="add-circle" size={54} color={buttonColor} />
+				<Ionicons name="add-circle" size={54} color={colors.green[400]} />
 			</Link>
 		</View>
 	);

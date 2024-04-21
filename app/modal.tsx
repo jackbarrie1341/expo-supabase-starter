@@ -112,7 +112,7 @@ export default function Modal() {
 			setError(error?.message);
 			return;
 		}
-		router.push("/home");
+		router.replace("/home");
 	};
 	return (
 		<View className="bg-background h-full">

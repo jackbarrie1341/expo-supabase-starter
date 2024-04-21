@@ -20,7 +20,7 @@ const ChatSubmitButton = ({
 }: ChatSubmitButtonProps) => {
 	return (
 		<TouchableOpacity
-			className="flex flex-row items-center justify-center bg-gray-50 border border-gray-200 rounded-full w-28 h-[46px] gap-x-2"
+			className="flex flex-row items-center justify-center bg-card border dark:border-zinc-600 border-gray-200 rounded-full w-28 h-[46px] gap-x-2"
 			disabled={isLoading}
 			onPress={() => {
 				handleSubmit(input);
