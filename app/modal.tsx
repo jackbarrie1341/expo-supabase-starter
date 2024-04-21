@@ -12,6 +12,7 @@ import {
 	ScrollView,
 	StyleSheet,
 	TextInput,
+	TouchableOpacity,
 	View,
 } from "react-native";
 
@@ -125,7 +126,7 @@ export default function Modal() {
 						<View className="flex flex-row flex-wrap justify-around">
 							{categories.map((item, index) => {
 								return (
-									<Pressable
+									<TouchableOpacity
 										key={index}
 										className="w-1/3 p-2 flex flex-col items-center justify-center"
 										onPress={() => {
@@ -137,7 +138,7 @@ export default function Modal() {
 									>
 										<CategoryIcon category={item} />
 										<Text className="text-sm">{item.name}</Text>
-									</Pressable>
+									</TouchableOpacity>
 								);
 							})}
 						</View>
@@ -179,14 +180,14 @@ export default function Modal() {
 							</TabsTrigger>
 						</TabsList>
 					</Tabs>
-					<Pressable
+					<TouchableOpacity
 						className="flex flex-row items-center gap-2 "
 						onPress={() => setModalVisible(true)}
 					>
 						{category && <CategoryIcon category={category} />}
 						<H3>Category:</H3>
 						<H3 className="font-light">{category?.name}</H3>
-					</Pressable>
+					</TouchableOpacity>
 					<H4 className="mt-4">Description</H4>
 					<Input
 						className="w-full"
