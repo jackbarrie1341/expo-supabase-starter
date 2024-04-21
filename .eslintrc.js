@@ -8,5 +8,7 @@ module.exports = {
 				endOfLine: "auto",
 			},
 		],
+		"simple-import-sort/imports": "off",
+		"simple-import-sort/exports": "off",
 	},
 };

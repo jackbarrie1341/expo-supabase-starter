@@ -32,7 +32,7 @@ interface Category {
 	icon: React.JSX.Element;
 }
 
-const categories: Category[] = [
+export const categories: Category[] = [
 	{
 		name: "Food",
 		color: "bg-purple-400",
@@ -136,7 +136,7 @@ export default function Modal() {
 										}}
 									>
 										<CategoryIcon category={item} />
-										<Text>{item.name}</Text>
+										<Text className="text-sm">{item.name}</Text>
 									</Pressable>
 								);
 							})}
