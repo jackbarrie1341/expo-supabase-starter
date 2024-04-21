@@ -23,7 +23,9 @@ export default function RootLayout() {
 					<Stack.Screen
 						name="modal"
 						options={{
+							headerShown: true,
 							presentation: "modal",
+							title: "New Transaction",
 						}}
 					/>
 				</Stack>

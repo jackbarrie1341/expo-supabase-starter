@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { H1, Muted } from "@/components/ui/typography";
 import { useSupabase } from "@/context/supabase-provider";
+import { useColorScheme } from "@/lib/useColorScheme";
 
 export default function TabTwoScreen() {
 	const { signOut } = useSupabase();
+	const { toggleColorScheme } = useColorScheme();
 
 	return (
 		<View className="flex-1 items-center justify-center bg-background p-4 gap-y-4">
@@ -23,6 +25,17 @@ export default function TabTwoScreen() {
 				}}
 			>
 				<Text>Sign Out</Text>
+			</Button>
+			<H1 className="text-center">Color Mode</H1>
+			<Button
+				className="w-full"
+				size="default"
+				variant="default"
+				onPress={() => {
+					toggleColorScheme();
+				}}
+			>
+				<Text>Toggle Color Scheme</Text>
 			</Button>
 		</View>
 	);

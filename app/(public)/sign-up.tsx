@@ -65,9 +65,7 @@ export default function SignUp() {
 		<SafeAreaView className="flex-1 bg-background p-4">
 			<View className="flex-1">
 				<H1 className="self-start">Sign Up</H1>
-				<Muted className="self-start mb-5">
-					to continue to Expo Supabase Starter
-				</Muted>
+				<Muted className="self-start mb-5">to continue to Stewardly</Muted>
 				<Form {...form}>
 					<View className="gap-4">
 						<FormField

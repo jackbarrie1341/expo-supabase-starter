@@ -1,3 +1,4 @@
+import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 
@@ -17,11 +18,36 @@ export default function ProtectedLayout() {
 							? theme.dark.background
 							: theme.light.background,
 				},
-				tabBarShowLabel: false,
 			}}
 		>
-			<Tabs.Screen name="home" />
-			<Tabs.Screen name="settings" />
+			<Tabs.Screen
+				name="home"
+				options={{
+					title: "Budget",
+					tabBarIcon: ({ color }) => (
+						<FontAwesome5 name="money-bill-wave" size={24} color={color} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name="chat"
+				options={{
+					title: "Chat",
+					tabBarIcon: ({ color }) => (
+						<Ionicons name="chatbox-outline" size={24} color={color} />
+					),
+				}}
+			/>
+
+			<Tabs.Screen
+				name="settings"
+				options={{
+					title: "Chat",
+					tabBarIcon: ({ color }) => (
+						<Feather name="settings" size={24} color={color} />
+					),
+				}}
+			/>
 		</Tabs>
 	);
 }
