@@ -48,8 +48,9 @@ export default function ChatScreen() {
 			console.log("✅ Streaming done!");
 		},
 		tools: {
-			addExpense: {
-				description: "Add a new expense to the users transaction list",
+			addTransaction: {
+				description:
+					"Add a new expense or income to the users transaction list",
 				parameters: z.object({
 					amount: z.number(),
 					item: z.string(),
