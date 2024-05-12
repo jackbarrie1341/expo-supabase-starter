@@ -1,8 +1,7 @@
-import { ScrollView, View, RefreshControl } from "react-native";
+import { ScrollView, View, RefreshControl, Text } from "react-native";
 
 import TransactionCard from "@/components/Home/TransactionCard";
-import { H1 } from "@/components/ui/typography";
-import { Tables } from "@/config/database.type";
+import { H1, H2, H3, H4, P } from "@/components/ui/typography";
 import { supabase } from "@/config/supabase";
 import { theme } from "@/lib/constants";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,36 +10,30 @@ import { useEffect, useState } from "react";
 import { useColorScheme } from "@/lib/useColorScheme";
 import CircularChart from "@/components/Home/CircularChart";
 import colors from "tailwindcss/colors";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function TabOneScreen() {
-	const [transactions, setTransactions] = useState<
-		Tables<"transactions">[] | null
-	>();
 	const [loading, setLoading] = useState(false);
 
 	const { colorScheme } = useColorScheme();
-	const buttonColor =
-		colorScheme === "light" ? theme.light.primary : theme.dark.primary;
-
-	useEffect(() => {
-		fetchData();
-	}, []);
 
 	const fetchData = async () => {
-		const { data, error } = await supabase
-			.from("transactions")
-			.select("*")
-			.order("created_at", { ascending: false });
-		// console.log("data", data);
-		if (error) console.log("error", error);
-		setTransactions(data);
-		data && setLoading(false);
+		// const { data, error } = await supabase
+		// 	.from("category_items")
+		// 	.select("name, category_id")
+		// 	.returns<CategoryItem[]>();
+		// // console.log("data", data);
+		// if (error) console.log("error", error);
+		// setCategoryItems(data);
+		// data && setLoading(false);
 	};
 
 	return (
 		<View className="flex-1 bg-background">
-			<View className="h-32 pt-20 bg-green-400 flex flex-row justify-center">
-				<H1 className="text-white">Stewardly</H1>
+			<View className="h-36 bg-green-400 flex flex-col justify-end pt-20">
+				<View className="w-full p-3">
+					<H1 className="text-white">Stewardly</H1>
+				</View>
 			</View>
 			<View className="p-4 mb-28">
 				<ScrollView
@@ -51,14 +44,18 @@ export default function TabOneScreen() {
 						/>
 					}
 				>
-					<CircularChart transactions={transactions} />
-					<View className="mb-4 mt-2">
+					<CircularChart transactions={[] as any} />
+
+					{/* Spacer */}
+					<View className="p-20"></View>
+					{/* <CircularChart transactions={transactions} /> */}
+					{/* <View className="mb-4 mt-2">
 						<H1>Transactions</H1>
 					</View>
 					{transactions &&
 						transactions.map((trans) => (
 							<TransactionCard transaction={trans} key={trans.id} />
-						))}
+						))} */}
 				</ScrollView>
 			</View>
 			<Link href="/modal" className="absolute bottom-4 right-4">

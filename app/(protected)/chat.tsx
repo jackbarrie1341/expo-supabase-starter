@@ -1,158 +1,149 @@
-/* eslint-disable */
-// @ts-nocheck
-import { OpenAI, useChat } from "react-native-gen-ui";
-import { useEffect } from "react";
-import { View, Text, FlatList } from "react-native";
-import { ZodFunctionDef, toTool, parseArguments } from "openai-zod-functions";
-import ChatInput from "@/components/chat/chat-input";
-import ChatSubmitButton from "@/components/chat/chat-submit-button";
-import ChatContainer from "@/components/chat/chat-container";
-import ChatMessage from "@/components/chat/chat-message";
-import * as z from "zod";
-import Thinking from "@/components/loaders/thinking";
-import TransactionCard from "@/components/Home/TransactionCard";
-import { useSupabase } from "@/context/supabase-provider";
-import { categories } from "@/app/modal.tsx";
-import { supabase } from "@/config/supabase";
-
-const openAi = new OpenAI({
-	apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY ?? "",
-	model: process.env.EXPO_PUBLIC_OPENAI_MODEL || "gpt-4",
-});
+import { View, Text } from "react-native";
 
 // IDEA: Allow users to ask "show me a summary of my spending this month" and it creates a bar chart
 export default function ChatScreen() {
-	// Chat with LLM
-	// @ts-ignore
-	const { user } = useSupabase();
-	const {
-		input,
-		error,
-		isLoading,
-		isStreaming,
-		messages,
-		handleSubmit,
-		onInputChange,
-	} = useChat({
-		openAi,
-		initialMessages: [
-			{
-				content: "Hello, how can I help you today?",
-				role: "assistant",
-			},
-		],
-		onError: (error) => {
-			console.error("Error while streaming:", error);
-		},
-		onSuccess: () => {
-			console.log("✅ Streaming done!");
-		},
-		tools: {
-			addTransaction: {
-				description:
-					"Add a new expense or income to the users transaction list",
-				parameters: z.object({
-					amount: z.number(),
-					item: z.string(),
-					category: z.enum(["Misc", "Food", "Housing", "Entertainment"]),
-				}),
-				render: async function* (args) {
-					// With 'yield' we can show loading  while fetching weather data
-					yield <Thinking />;
+	// // Chat with LLM
+	// // @ts-ignore
+	// const { user } = useSupabase();
+	// const {
+	// 	input,
+	// 	error,
+	// 	isLoading,
+	// 	isStreaming,
+	// 	messages,
+	// 	handleSubmit,
+	// 	onInputChange,
+	// } = useChat({
+	// 	openAi,
+	// 	initialMessages: [
+	// 		{
+	// 			content: "Hello, how can I help you today?",
+	// 			role: "assistant",
+	// 		},
+	// 	],
+	// 	onError: (error) => {
+	// 		console.error("Error while streaming:", error);
+	// 	},
+	// 	onSuccess: () => {
+	// 		console.log("✅ Streaming done!");
+	// 	},
+	// 	tools: {
+	// 		addTransaction: {
+	// 			description:
+	// 				"Add a new expense or income to the users transaction list",
+	// 			parameters: z.object({
+	// 				amount: z.number(),
+	// 				item: z.string(),
+	// 				category: z.enum([
+	// 					"Misc",
+	// 					"Food",
+	// 					"Housing",
+	// 					"Entertainment",
+	// 					"Income",
+	// 				]),
+	// 				transactionType: z.enum(["income", "expense"]),
+	// 			}),
+	// 			render: async function* (args) {
+	// 				// With 'yield' we can show loading  while fetching weather data
+	// 				yield <Thinking />;
 
-					// Call API for current weather
-					console.log("amount", args.amount);
-					console.log("category", args.category);
-					console.log("items2", args.item);
-					const date = new Date();
-					console.log(date);
-					const color = categories.find(
-						(val) => val.name === args.category,
-					).color;
-					console.log(color);
+	// 				// Call API for current weather
+	// 				console.log("amount", args.amount);
+	// 				console.log("category", args.category);
+	// 				console.log("items2", args.item);
+	// 				console.log("type", args.transactionType);
+	// 				const date = new Date();
+	// 				console.log(date);
+	// 				const color = categories.find(
+	// 					(val) => val.name === args.category,
+	// 				).color;
+	// 				console.log(color);
 
-					if (!user) {
-						return {
-							data: "error adding transaction to database. Try again later",
-							component: (
-								<View>
-									<Text>Error!</Text>
-								</View>
-							),
-						};
-					}
+	// 				if (!user) {
+	// 					console.log("HLLLLLLEO");
+	// 					return {
+	// 						data: "error adding transaction to database. Try again later",
+	// 						component: (
+	// 							<View>
+	// 								<Text>Error!</Text>
+	// 							</View>
+	// 						),
+	// 					};
+	// 				}
 
-					const { error } = await supabase.from("transactions").insert({
-						amount: args.amount,
-						description: args.item,
-						category: args.category,
-						type: "expense",
-						user_id: user?.id,
-						color: color,
-					});
+	// 				const { error } = await supabase.from("transactions").insert({
+	// 					amount: args.amount,
+	// 					description: args.item,
+	// 					category: args.category,
+	// 					type: args.transactionType,
+	// 					user_id: user?.id,
+	// 					color: color,
+	// 				});
 
-					const transaction = {
-						amount: args.amount,
-						type: "expense",
-						created_at: new Date(),
-						category: args.category,
-						description: args.item,
-						color: color,
-					};
+	// 				const transaction = {
+	// 					amount: args.amount,
+	// 					type: args.transactionType,
+	// 					created_at: new Date(),
+	// 					category: args.category,
+	// 					description: args.item,
+	// 					color: color,
+	// 				};
 
-					yield <Thinking />;
-					// Return the final result
-					return {
-						// The data will be seen by the model
-						data: "Successfully added the transaction to the database.",
-						// The component will be rendered to the user
-						component: <TransactionCard transaction={transaction} />,
-					};
-				},
-			},
-		},
-	});
+	// 				// Return the final result
+	// 				return {
+	// 					// The data will be seen by the model
+	// 					data: "Successfully added the transaction to the database.",
+	// 					// The component will be rendered to the user
+	// 					component: <TransactionCard transaction={transaction} />,
+	// 				};
+	// 			},
+	// 		},
+	// 	},
+	// });
 
 	// Agent output
 	return (
-		<ChatContainer>
-			{/* List of messages */}
-			<FlatList
-				data={messages}
-				inverted
-				contentContainerStyle={{
-					flexDirection: "column-reverse",
-					padding: 12,
-				}}
-				renderItem={({ item, index }) => (
-					// Individual message component
-					<ChatMessage
-						message={item}
-						isLastMessage={index === messages.length - 1}
-						isLoading={isLoading}
-						isStreaming={isStreaming}
-						error={error}
-					/>
-				)}
-			/>
+		<View>
+			<Text>Hi</Text>
+		</View>
+		// <ChatContainer>
+		// 	{/* List of messages */}
+		// 	<FlatList
+		// 		data={messages}
+		// 		inverted
+		// 		contentContainerStyle={{
+		// 			flexDirection: "column-reverse",
+		// 			padding: 12,
+		// 		}}
+		// 		renderItem={({ item, index }) => (
+		// 			// Individual message component
+		// 			<ChatMessage
+		// 				message={item}
+		// 				isLastMessage={index === messages.length - 1}
+		// 				isLoading={isLoading}
+		// 				isStreaming={isStreaming}
+		// 				error={error}
+		// 			/>
+		// 		)}
+		// 	/>
 
-			<View className="flex flex-row items-end p-3 gap-x-2">
-				{/* Text input field */}
-				<View className="grow basis-0">
-					<ChatInput input={input} onInputChange={onInputChange} />
-				</View>
+		// 	<View className="flex flex-row items-end p-3 gap-x-2">
+		// 		{/* Text input field */}
+		// 		<View className="grow basis-0">
+		// 			<ChatInput input={input} onInputChange={onInputChange} />
+		// 		</View>
 
-				{/* Submit button */}
-				<View className="shrink-0">
-					<ChatSubmitButton
-						isLoading={isLoading}
-						isStreaming={isStreaming}
-						input={input}
-						handleSubmit={handleSubmit}
-					/>
-				</View>
-			</View>
-		</ChatContainer>
+		// 		{/* Submit button */}
+		// 		<View className="shrink-0">
+		// 			<ChatSubmitButton
+		// 				isLoading={isLoading}
+		// 				isStreaming={isStreaming}
+		// 				input={input}
+		// 				handleSubmit={handleSubmit}
+		// 			/>
+		// 		</View>
+		// 	</View>
+		// </ChatContainer>
 	);
 }
 

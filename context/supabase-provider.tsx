@@ -38,7 +38,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
 	const [initialized, setInitialized] = useState<boolean>(false);
 
 	const signUp = async (email: string, password: string) => {
-		const { error } = await supabase.auth.signUp({
+		const { error, data } = await supabase.auth.signUp({
 			email,
 			password,
 		});

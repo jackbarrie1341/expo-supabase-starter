@@ -1,4 +1,9 @@
-import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+	Feather,
+	FontAwesome5,
+	Ionicons,
+	MaterialIcons,
+} from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 
@@ -24,6 +29,15 @@ export default function ProtectedLayout() {
 			<Tabs.Screen
 				name="home"
 				options={{
+					title: "Insights",
+					tabBarIcon: ({ color }) => (
+						<MaterialIcons name="insights" size={24} color={color} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name="budget"
+				options={{
 					title: "Budget",
 					tabBarIcon: ({ color }) => (
 						<FontAwesome5 name="money-bill-wave" size={24} color={color} />
@@ -43,7 +57,7 @@ export default function ProtectedLayout() {
 			<Tabs.Screen
 				name="settings"
 				options={{
-					title: "Chat",
+					title: "Settings",
 					tabBarIcon: ({ color }) => (
 						<Feather name="settings" size={24} color={color} />
 					),

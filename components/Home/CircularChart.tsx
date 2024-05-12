@@ -54,10 +54,14 @@ export default function CircularChart({
 	const { isDarkColorScheme } = useColorScheme();
 
 	useEffect(() => {
-		transactions && updateChart();
+		console.log("hi", transactions);
+		if (transactions) {
+			if (transactions.length !== 0) updateChart();
+		}
 	}, [transactions]);
 
 	const updateChart = () => {
+		console.log(transactions);
 		let totalExpenses = 0;
 		let totalIncome = 0;
 		const colorsMap = new Map();

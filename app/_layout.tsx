@@ -44,6 +44,48 @@ export default function RootLayout() {
 							},
 						}}
 					/>
+					<Stack.Screen
+						name="add-budget-item"
+						options={{
+							headerShown: true,
+							presentation: "modal",
+							title: "Add Budget Item",
+
+							headerTitleStyle: {
+								color:
+									colorScheme === "dark"
+										? theme.light.background
+										: theme.dark.background,
+							},
+							headerStyle: {
+								backgroundColor:
+									colorScheme === "dark"
+										? theme.dark.background
+										: theme.light.background,
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="update-budget-item"
+						options={{
+							headerShown: true,
+							presentation: "modal",
+							title: "Edit",
+
+							headerTitleStyle: {
+								color:
+									colorScheme === "dark"
+										? theme.light.background
+										: theme.dark.background,
+							},
+							headerStyle: {
+								backgroundColor:
+									colorScheme === "dark"
+										? theme.dark.background
+										: theme.light.background,
+							},
+						}}
+					/>
 				</Stack>
 			</SafeAreaProvider>
 		</SupabaseProvider>

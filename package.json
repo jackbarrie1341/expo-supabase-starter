@@ -27,7 +27,6 @@
 		"react-hook-form": "^7.45.0",
 		"react-native": "0.73.6",
 		"react-native-chart-kit": "^6.12.0",
-		"react-native-gen-ui": "^1.4.0",
 		"react-native-gesture-handler": "~2.14.0",
 		"react-native-markdown-display": "^7.0.2",
 		"react-native-pie-chart": "^3.0.2",
@@ -43,8 +42,6 @@
 	"devDependencies": {
 		"@babel/core": "^7.20.0",
 		"@types/react": "~18.2.48",
-		"eslint": "^8.51.0",
-		"eslint-config-universe": "^12.0.0",
 		"prettier": "^3.0.3",
 		"typescript": "^5.3.3"
 	},
