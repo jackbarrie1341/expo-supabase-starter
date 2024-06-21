@@ -39,7 +39,16 @@ import Remaining from "@/components/budget/Remaining";
 // 	{ id: 9, name: "Debt" },
 // ];
 
-export const categories = [
+export interface Category {
+	id: number;
+	name: string;
+	color: string;
+	textColor: string;
+	buttonColor: string;
+	tintColor: string;
+}
+
+export const categories: Category[] = [
 	{
 		id: 1,
 		name: "Income",

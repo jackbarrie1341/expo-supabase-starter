@@ -5,7 +5,7 @@ import {
 	MaterialIcons,
 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Dispatch, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import {
 	Modal as ModalRn,
 	Pressable,
@@ -26,42 +26,44 @@ import { useSupabase } from "@/context/supabase-provider";
 import { theme } from "@/lib/constants";
 import { useColorScheme } from "@/lib/useColorScheme";
 import { cn } from "@/lib/utils";
+import { categories, Category, CategoryItem } from "./(protected)/budget";
+import CategoryList from "@/components/addExpense/CategoryList";
 
-interface Category {
-	name: string;
-	color: string;
-	icon: React.JSX.Element;
-}
+// interface Category {
+// 	name: string;
+// 	color: string;
+// 	icon: React.JSX.Element;
+// }
 
-export const categories: Category[] = [
-	{
-		name: "Food",
-		color: "bg-purple-400",
-		icon: <MaterialIcons name="restaurant" size={24} color="white" />,
-	},
-	{
-		name: "Entertainment",
-		color: "bg-pink-400",
-		icon: <Feather name="smile" size={24} color="white" />,
-	},
-	{
-		name: "Housing",
-		color: "bg-blue-400",
-		icon: <FontAwesome6 name="house" size={24} color="white" />,
-	},
-	{
-		name: "Misc",
-		color: "bg-gray-400",
-		icon: (
-			<MaterialIcons name="miscellaneous-services" size={24} color="white" />
-		),
-	},
-	{
-		name: "Income",
-		color: "bg-green-400",
-		icon: <FontAwesome6 name="money-bill-wave" size={24} color="white" />,
-	},
-];
+// export const categories: Category[] = [
+// 	{
+// 		name: "Food",
+// 		color: "bg-purple-400",
+// 		icon: <MaterialIcons name="restaurant" size={24} color="white" />,
+// 	},
+// 	{
+// 		name: "Entertainment",
+// 		color: "bg-pink-400",
+// 		icon: <Feather name="smile" size={24} color="white" />,
+// 	},
+// 	{
+// 		name: "Housing",
+// 		color: "bg-blue-400",
+// 		icon: <FontAwesome6 name="house" size={24} color="white" />,
+// 	},
+// 	{
+// 		name: "Misc",
+// 		color: "bg-gray-400",
+// 		icon: (
+// 			<MaterialIcons name="miscellaneous-services" size={24} color="white" />
+// 		),
+// 	},
+// 	{
+// 		name: "Income",
+// 		color: "bg-green-400",
+// 		icon: <FontAwesome6 name="money-bill-wave" size={24} color="white" />,
+// 	},
+// ];
 
 export default function Modal() {
 	const router = useRouter();
@@ -75,17 +77,43 @@ export default function Modal() {
 	const [error, setError] = useState<string | undefined>();
 	const [modalVisible, setModalVisible] = useState(false);
 	const { colorScheme } = useColorScheme();
+	const [categoryItems, setCategoryItems] = useState<CategoryItem[] | null>(
+		null,
+	);
+	const [categoryItem, setCategoryItem] = useState<CategoryItem | undefined>(
+		undefined,
+	);
 	const iconColor =
 		colorScheme === "light" ? theme.light.primary : theme.dark.primary;
 
 	const handleTabSwitch = (type: string) => {
 		setValue(type);
 		if (type === "expense") {
-			setCategory(categories.find((val) => val.name === "Misc"));
+			const newCategoryItem = categoryItems?.find(
+				(val) => val.name === "Water",
+			);
+			setCategory(categories.find((cat) => cat.id === newCategoryItem?.id));
+			setCategoryItem(newCategoryItem);
 		} else {
-			setCategory(categories.find((val) => val.name === "Income"));
+			const newCategoryItem = categoryItems?.find(
+				(val) => val.name === "Salary",
+			);
+			setCategory(categories.find((cat) => cat.id === newCategoryItem?.id));
+			setCategoryItem(newCategoryItem);
 		}
 	};
+	useEffect(() => {
+		const fetchData = async () => {
+			const { data, error } = await supabase
+				.from("category_items")
+				.select("id, name, category_id")
+				.returns<CategoryItem[]>();
+			// console.log("data", data);
+			if (error) console.log("error", error);
+			setCategoryItems(data);
+		};
+		fetchData();
+	}, []);
 
 	const handleCreate = async () => {
 		if (!amount) {
@@ -122,27 +150,13 @@ export default function Modal() {
 					<Pressable onPress={() => setModalVisible(!modalVisible)}>
 						<AntDesign name="close" size={24} color={iconColor} />
 					</Pressable>
-					{categories && (
-						<View className="flex flex-row flex-wrap justify-around">
-							{categories.map((item, index) => {
-								return (
-									<TouchableOpacity
-										key={index}
-										className="w-1/3 p-2 flex flex-col items-center justify-center"
-										onPress={() => {
-											setCategory(
-												categories.find((val) => val.name === item.name),
-											);
-											setModalVisible(false);
-										}}
-									>
-										<CategoryIcon category={item} />
-										<Text className="text-sm">{item.name}</Text>
-									</TouchableOpacity>
-								);
-							})}
-						</View>
-					)}
+					<ScrollView>
+						<CategoryList
+							categoryItems={categoryItems}
+							setCategory={setCategory}
+							setCategoryItem={setCategoryItem}
+						/>
+					</ScrollView>
 				</View>
 			</ModalRn>
 
@@ -184,9 +198,9 @@ export default function Modal() {
 						className="flex flex-row items-center gap-2 "
 						onPress={() => setModalVisible(true)}
 					>
-						{category && <CategoryIcon category={category} />}
+						{categoryItem && <CategoryIcon category={category} />}
 						<H3>Category:</H3>
-						<H3 className="font-light">{category?.name}</H3>
+						<H3 className="font-light">{categoryItem?.name}</H3>
 					</TouchableOpacity>
 					<H4 className="mt-4">Description</H4>
 					<Input
@@ -209,12 +223,13 @@ export default function Modal() {
 	);
 }
 
-const CategoryIcon = ({ category }: { category: Category }) => {
+const CategoryIcon = ({ category }: { category: Category | undefined }) => {
+	if (!category) {
+		return null;
+	}
 	return (
 		<View className="flex flex-row justify-center mt-1 ">
-			<View className={cn("rounded-full p-3", category.color)}>
-				{category.icon}
-			</View>
+			<View className={cn("rounded-full p-3", category.color)}></View>
 		</View>
 	);
 };
